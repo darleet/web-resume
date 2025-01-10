@@ -2,6 +2,7 @@ services:
   nginx:
     image: nginx:alpine
     container_name: nginx_server
+    restart: unless-stopped
     env_file:
       - .env
     ports:
