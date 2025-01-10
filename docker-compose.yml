@@ -12,7 +12,6 @@ services:
       - ./src:/usr/share/nginx/html:ro
       - ./nginx/nginx.conf:/etc/nginx/templates:ro
       - letsencrypt:/etc/letsencrypt:ro
-      - certbot:/usr/share/nginx/html:ro
   certbot:
     container_name: certbot
     image: certbot/certbot:latest
@@ -25,9 +24,8 @@ services:
       --email ${EMAIL} --agree-tos --no-eff-email
       -d ${DOMAIN}
     volumes:
+      - ./src:/usr/share/nginx/html
       - letsencrypt:/etc/letsencrypt
-      - certbot:/usr/share/nginx/html
 
 volumes:
   letsencrypt:
-  certbot:
