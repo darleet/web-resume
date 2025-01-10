@@ -2,8 +2,29 @@ services:
   nginx:
     image: nginx:alpine
     container_name: nginx_server
+    env_file:
+      - .env
     ports:
       - "80:80"
+      - "443:443"
     volumes:
       - ./src:/usr/share/nginx/html:ro
       - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - letsencrypt:/etc/letsencrypt:ro
+      - certbot:/var/www/certbot
+  certbot:
+    container_name: certbot
+    image: certbot/certbot:latest
+    depends_on:
+      - nginx
+    command: >-
+      certonly --reinstall --webroot --webroot-path=/var/www/certbot
+      --email ${EMAIL} --agree-tos --no-eff-email
+      -d ${DOMAIN}
+    volumes:
+      - letsencrypt:/etc/letsencrypt
+      - certbot:/var/www/certbot
+
+volumes:
+  letsencrypt:
+  certbot:
