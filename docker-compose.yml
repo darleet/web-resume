@@ -18,6 +18,8 @@ services:
     image: certbot/certbot:latest
     depends_on:
       - nginx
+    env_file:
+      - .env
     command: >-
       certonly --reinstall --webroot --webroot-path=/var/www/certbot
       --email ${EMAIL} --agree-tos --no-eff-email
